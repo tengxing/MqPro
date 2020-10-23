@@ -1,5 +1,6 @@
 package cn.littleterry.server;
 
+import java.util.Date;
 import java.util.Queue;
 
 /**
@@ -14,12 +15,20 @@ public class QueueConsumer implements Runnable {
     }
 
     public void run() {
-        while (true){
-            String data = queue.peek();
-            if (data !=null){
 
-                System.out.println("消费消息:"+ data);
-                queue.poll();
+        while (true){
+
+            //System.out.println("queue中的个数为："+queue.size());
+
+            String data = queue.poll();
+            if (data !=null){
+                System.out.println("消费消息=====>"+data);
+            }else {
+                try {
+                    Thread.sleep(1000*5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

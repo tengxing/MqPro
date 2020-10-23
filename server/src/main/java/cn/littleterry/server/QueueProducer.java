@@ -1,5 +1,6 @@
 package cn.littleterry.server;
 
+import java.util.Date;
 import java.util.Queue;
 
 /**
@@ -14,13 +15,14 @@ public class QueueProducer implements Runnable{
     }
     public void run() {
         for (int i=0;i<Integer.MAX_VALUE;i++){
-            queue.add(String.valueOf(i));
             try {
-                Thread.sleep(1000*2);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("生产消息:"+ i);
+            String data = String.format("{'id':'%s'}",i );
+            queue.add(data);
+            System.out.println("生产消息=>"+ data);
         }
     }
 }
