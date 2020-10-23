@@ -1,14 +1,17 @@
 package cn.littleterry.server;
 
 import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.DelayQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
-/**
+/** 先进先出顺序消费
  * @author terry
  * @since 02/02/2020
  */
 public class QueueServer{
-    private static Queue<String> queue = new ConcurrentLinkedQueue<String>();
+    private static LinkedBlockingQueue<String> queue = new LinkedBlockingQueue<String>(10);
 
     public static void main(String[] args) {
 
@@ -18,11 +21,7 @@ public class QueueServer{
         Thread thread = new Thread(queueProducer);
         thread.start();
 
-        try {
-            Thread.sleep(10*1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
         QueueConsumer consumer = new QueueConsumer(queue);
         Thread threadConsumer = new Thread(consumer);
         threadConsumer.start();

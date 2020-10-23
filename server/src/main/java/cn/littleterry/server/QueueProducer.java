@@ -2,6 +2,7 @@ package cn.littleterry.server;
 
 import java.util.Date;
 import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * 生产消息，每2秒生产一次数据
@@ -9,8 +10,8 @@ import java.util.Queue;
  * @since 02/02/2020
  */
 public class QueueProducer implements Runnable{
-    public Queue<String> queue;
-    public QueueProducer(Queue<String> queue){
+    public LinkedBlockingQueue<String> queue;
+    public QueueProducer(LinkedBlockingQueue<String> queue){
         this.queue = queue;
     }
     public void run() {
@@ -21,7 +22,12 @@ public class QueueProducer implements Runnable{
                 e.printStackTrace();
             }
             String data = String.format("{'id':'%s'}",i );
-            queue.add(data);
+            //queue.offer(data);
+            try {
+                queue.put(data);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             System.out.println("生产消息=>"+ data);
         }
     }
